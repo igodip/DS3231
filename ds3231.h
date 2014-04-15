@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include "datetime.h"
 
 #define BCD2DEC(ARG) ((ARG & 0xF) + ((ARG & 0xF0) >> 4)*10)
-#define DEC2BCD(ARG) (ARG%10) | ((ARG/10)<< 4):
+#define DEC2BCD(ARG) (ARG%10) | ((ARG/10) << 4):
 
 
 #define SECONDS_FROM_1970_TO_2000 946684800
@@ -79,9 +79,13 @@ THE SOFTWARE.
 #define DS3231_HOURS_10_BIT         4
 #define DS3231_HOURS_1_BIT          3
 #define DS3231_HOURS_1_LENGTH       4
+#define DS3231_HOURS_MASK			0x1F
 
-//DayOfWeek
-#define 
+//Day
+#define DS3231_DAY_MASK				0x07
+
+//Date
+#define DS3231_DATE_MASK			0x3F
 
 // control register bits
 #define DS3231_A1IE     0x01	//Alarm 1 Interrupt Enable
@@ -93,16 +97,18 @@ THE SOFTWARE.
 #define DS3231_EOSC		0x80	//Enable Oscillator
 
 // status register bits
-#define DS3231_A1F      0x1
-#define DS3231_A2F      0x2
-#define DS3231_OSF      0x80
+#define DS3231_STATUS_A1F      0x1
+#define DS3231_STATUS_A2F      0x2
+#define DS3231_STATUS_OSF      0x80
 
 class DS3231 {
 
 private:
 
 	uint8_t devAddr;
+	
 	uint8_t buffer[7];
+
 	bool mode12;
 
 	RtcCallback * alarm1Callback;
@@ -112,7 +118,7 @@ private:
 	int alarm2Pin;
 
 protected:
-	
+	void setAlarm(int num, const DateTime & date,const RtcCallback & callback, const int intPin);
 
 public:
 	DS3231();
@@ -157,8 +163,14 @@ public:
 	void setDateTime(const DateTime & date);
 
 	//Alarms
-	void setAlarm1(const DateTime & date,const RtcCallback & callback, const int & intPin);
-	void setAlarm2(const DateTime & date,const RtcCallback & callback, const int & intPin);
+	void setAlarm1(const DateTime & date,const RtcCallback & callback, const int intPin);
+	void setAlarm2(const DateTime & date,const RtcCallback & callback, const int intPin);
+	
+	void unsetAlarm1();
+	void unsetAlarm2();
+
+
+	//Aging Offset
 
 
 };

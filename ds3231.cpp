@@ -87,7 +87,7 @@ void DS3231::setMinutes(uint8_t minutes){
 //Hours
 uint8_t DS3231::getHours12() {
   I2Cdev::readByte(devAddr, DS3231_RA_HOURS,buffer);
-  return (buffer[0] & 0xF) + ((buffer[0] & 0x10) >> 4)*10;
+  return ;
   
 }
 
@@ -99,7 +99,7 @@ uint8_t DS3231::getDayOfWeek() {
 
 void DS3231::setDayOfWeek(uint8_t day){
 
-	day = day & 0x7;
+	day = day & DS3231_;
 	I2Cdev::writeByte(devAddr,DS3231_RA_DAY,day);
 
 }
