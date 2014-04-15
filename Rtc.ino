@@ -9,7 +9,8 @@ void setup() {
   
   Serial.begin(9600);
   Wire.begin();
-  //I2Cdev::writeByte(0x68,0x0E,0x4);
+
+
   memset(buffer,0,8);
   
 }
@@ -17,15 +18,6 @@ void setup() {
 
 void loop() {
   
-//  Wire.beginTransmission(DS3231_I2C_ADDR);
-//  Wire.write(DS3231_TIME_CAL_ADDR);
-//  Wire.endTransmission();
-//  
-//  Wire.requestFrom(DS3231_I2C_ADDR,7);
-//  
-//  for(int i = 0; i < 7; i++){
-//    Serial.println(Wire.read());
-//  }
   
   DateTime dateTime = rtc.getDateTime();
 

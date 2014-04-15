@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include "datetime.h"
 
 #define BCD2DEC(ARG) ((ARG & 0xF) + ((ARG & 0xF0) >> 4)*10)
-#define DEC2BCD(ARG) (ARG%10) | ((ARG/10) << 4):
+#define DEC2BCD(ARG) ((ARG%10) | ((ARG/10) << 4))
 
 
 #define SECONDS_FROM_1970_TO_2000 946684800
