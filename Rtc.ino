@@ -36,7 +36,10 @@ void loop() {
   Serial.print(":");
   Serial.println(dateTime.seconds);
   Serial.print(dateTime.day);
-  Serial.println(dateTime.month);
+  Serial.print("/");
+  Serial.print(dateTime.month);
+  Serial.print("/");
+  Serial.println(dateTime.year);
   
   delay(5000);
   

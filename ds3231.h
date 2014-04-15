@@ -87,6 +87,14 @@ THE SOFTWARE.
 //Date
 #define DS3231_DATE_MASK			0x3F
 
+//Month
+#define DS3231_MONTH_MASK			0x1F
+
+//Year
+#define DS3231_YEAR_CENTURY_MASK		0x80 //Last bit in month byte
+#define DS3231_YEAR_CENTURY_MASK_BIT	7
+#define DS3231_YEAR_MASK				0xFF
+
 // control register bits
 #define DS3231_A1IE     0x01	//Alarm 1 Interrupt Enable
 #define DS3231_A2IE     0x02	//Alarm 2 Interrupt Enable

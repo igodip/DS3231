@@ -87,19 +87,19 @@ void DS3231::setMinutes(uint8_t minutes){
 //Hours
 uint8_t DS3231::getHours12() {
   I2Cdev::readByte(devAddr, DS3231_RA_HOURS,buffer);
-  return ;
+  return BCD2DEC(buffer[0] & DS3231_HOURS_MASK);
   
 }
 
 //Day
 uint8_t DS3231::getDayOfWeek() {
 	I2Cdev::readByte(devAddr,DS3231_RA_DAY,buffer);
-	return (buffer[0] & 0x7);
+	return (buffer[0] & DS3231_DAY_MASK);
 }
 
 void DS3231::setDayOfWeek(uint8_t day){
 
-	day = day & DS3231_;
+	day = day & DS3231_DAY_MASK;
 	I2Cdev::writeByte(devAddr,DS3231_RA_DAY,day);
 
 }
@@ -132,14 +132,24 @@ DateTime DS3231::getDateTime() {
 	t.seconds = BCD2DEC(buffer[0] & DS3231_SECONDS_MASK);
 	t.minutes = BCD2DEC(buffer[1] & DS3231_MINUTES_MASK);
 	//TODO: :O see doc
-	t.hours = BCD2DEC(buffer[2] & 0x7F);
+	t.hours = BCD2DEC(buffer[2] & DS3231_HOURS_MASK);
 
 	//TODO: :O see doc
-	t.dayOfWeek = buffer[3] & 0x7;
+	t.dayOfWeek = buffer[3] & DS3231_DAY_MASK;
 
-	t.day = BCD2DEC(buffer[4] & 0x3F);
-	t.month = BCD2DEC(buffer[5] & 0x1F);
-	t.year = BCD2DEC(buffer[6]);
+	t.day = BCD2DEC(buffer[4] & DS3231_DATE_MASK);
+	t.month = BCD2DEC(buffer[5] & DS3231_MONTH_MASK);
+
+	//Centruy
+	uint8_t century = (buffer[5] & DS3231_YEAR_CENTURY_MASK) << DS3231_YEAR_CENTURY_MASK_BIT;
+	
+	if(century){
+		t.year = 2000;
+	}else{
+		t.year = 1900;
+	}
+
+	t.year += BCD2DEC(buffer[6]);
 
 	return t;
 
