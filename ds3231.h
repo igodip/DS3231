@@ -28,11 +28,12 @@ THE SOFTWARE.
 #include "rtccallback.h"
 #include "datetime.h"
 
-#define BCD2DEC(ARG) ((ARG & 0x7) + ((ARG & 0x70) >> 4)*10)
+#define BCD2DEC(ARG) ((ARG & 0xF) + ((ARG & 0xF0) >> 4)*10)
+#define DEC2BCD(ARG) (ARG%10) | ((ARG/10)<< 4):
 
 
 #define SECONDS_FROM_1970_TO_2000 946684800
-#define INVALID 255
+#define INVALID_STATE 255
 
 // i2c slave address of the DS3231 chip
 #define DS3231_I2C_ADDR             0x68
@@ -66,6 +67,12 @@ THE SOFTWARE.
 #define DS3231_RA_AL1_HOURS			0x0C
 #define DS3231_RA_AL1_DAY			0x0D //Day or date
 
+//Seconds 
+#define DS3231_SECONDS_MASK			0x7F
+
+//Minutes
+#define DS3231_MINUTES_MASK			0x7F
+
 //Hours
 #define DS3231_HOURS_MODE_BIT       6 // 0 = 24-hour mode, 1 = 12-hour mode
 #define DS3231_HOURS_AMPM_BIT       5 // 2nd HOURS_10 bit if in 24-hour mode
@@ -73,10 +80,17 @@ THE SOFTWARE.
 #define DS3231_HOURS_1_BIT          3
 #define DS3231_HOURS_1_LENGTH       4
 
+//DayOfWeek
+#define 
+
 // control register bits
-#define DS3231_A1IE     0x1
-#define DS3231_A2IE     0x2
-#define DS3231_INTCN    0x4
+#define DS3231_A1IE     0x01	//Alarm 1 Interrupt Enable
+#define DS3231_A2IE     0x02	//Alarm 2 Interrupt Enable
+#define DS3231_INTCN    0x04	//Interrupt Control
+#define DS3231_RS		0x18	//Rate Select
+#define DS3231_CONV		0x20	//Convert Temperature
+#define DS3231_BBSQW	0x40	//Battery-Backed Square-Wave Enable
+#define DS3231_EOSC		0x80	//Enable Oscillator
 
 // status register bits
 #define DS3231_A1F      0x1

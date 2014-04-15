@@ -113,7 +113,9 @@ uint8_t DS3231::getMonth() {
 }
 
 void DS3231::setMonth(uint8_t month) {
-	//
+	
+	I2Cdev::writeByte(devAddr,DS3231_RA_MONTH,month);
+
 }
 
 //Year 
@@ -127,11 +129,12 @@ DateTime DS3231::getDateTime() {
 	
 	I2Cdev::readBytes(devAddr,DS3231_TIME_CAL_ADDR,7,buffer);
 
-	t.seconds = BCD2DEC(buffer[0] & 0x7F);
-	t.minutes = BCD2DEC(buffer[1] & 0x7F);
+	t.seconds = BCD2DEC(buffer[0] & DS3231_SECONDS_MASK);
+	t.minutes = BCD2DEC(buffer[1] & DS3231_MINUTES_MASK);
 	//TODO: :O see doc
 	t.hours = BCD2DEC(buffer[2] & 0x7F);
 
+	//TODO: :O see doc
 	t.dayOfWeek = buffer[3] & 0x7;
 
 	t.day = BCD2DEC(buffer[4] & 0x3F);
@@ -139,6 +142,12 @@ DateTime DS3231::getDateTime() {
 	t.year = BCD2DEC(buffer[6]);
 
 	return t;
+
+
+}
+
+void DS3231::setDateTime(const DateTime & dateTime) {
+	
 
 
 }
