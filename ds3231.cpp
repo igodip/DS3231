@@ -101,23 +101,24 @@ uint8_t DS3231::getDayOfWeek() {
 
 void DS3231::setDayOfWeek(uint8_t day){
 
-	//Wrong
-	day = day & DS3231_DAY_MASK;
+	day = DEC2BCD(day) & DS3231_DAY_MASK;
 	I2Cdev::writeByte(devAddr,DS3231_RA_DAY,day);
 
 }
 
-//Month
+//GetMonth
 uint8_t DS3231::getMonth() {
+
   I2Cdev::readByte(devAddr,DS3231_RA_MONTH,buffer);
-  
-  return (buffer[0] & 0xF) + ((buffer[0] & 0x10)>> 4)*10;
+  return BCD2DEC(buffer[0] & DS3231_MONTH_MASK);
   
 }
 
+//SetMonth
 void DS3231::setMonth(uint8_t month) {
 	
-	//I2Cdev::writeByte(devAddr,DS3231_RA_MONTH,month);
+	month = DEC2BCD(month) & DS3231_MONTH_MASK;
+	I2Cdev::writeByte(devAddr,DS3231_RA_MONTH,month);
 
 }
 
@@ -140,7 +141,7 @@ DateTime DS3231::getDateTime() {
 	t.month = BCD2DEC(buffer[5] & DS3231_MONTH_MASK);
 
 	//Centruy
-	uint8_t century = (buffer[5] & DS3231_YEAR_CENTURY_MASK) << DS3231_YEAR_CENTURY_MASK_BIT;
+	uint8_t century = (buffer[5] & DS3231_YEAR_CENTURY_MASK) >> DS3231_YEAR_CENTURY_MASK_BIT;
 	
 	if(century){
 		t.year = 2000;
@@ -155,13 +156,16 @@ DateTime DS3231::getDateTime() {
 
 }
 
-void DS3231::setDateTime(const DateTime & dateTime) {
+//SetDateTime
+void DS3231::setDateTime(DateTime dateTime) {
 	
 	uint8_t century;
 
-	if(dateTime.year > 2000){
+	if(dateTime.year >= 2000){
+		dateTime.year -= 2000;
 		century = 1;
 	}else{
+		dateTime.year -= 1900;
 		century = 0;
 	}
 
@@ -171,11 +175,9 @@ void DS3231::setDateTime(const DateTime & dateTime) {
 	buffer[3] = DEC2BCD(dateTime.dayOfWeek) & DS3231_DAY_MASK;
 	buffer[4] = DEC2BCD(dateTime.day) & DS3231_DATE_MASK;
 	buffer[5] = (DEC2BCD(dateTime.month) & DS3231_MONTH_MASK) | (century << DS3231_YEAR_CENTURY_MASK_BIT);
-	buffer[6] = DEC2BCD(dateTime.year % 100) & DS3231_YEAR_MASK;
+	buffer[6] = DEC2BCD(dateTime.year) & DS3231_YEAR_MASK;
 
 	I2Cdev::writeBytes(devAddr,DS3231_TIME_CAL_ADDR,7,buffer);
 
-
-
-
 }
+

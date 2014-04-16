@@ -168,7 +168,7 @@ public:
 
 	//Date
 	DateTime getDateTime();
-	void setDateTime(const DateTime & date);
+	void setDateTime(DateTime date);
 
 	//Alarms
 	void setAlarm1(const DateTime & date,const RtcCallback & callback, const int intPin);

@@ -9,8 +9,19 @@ void setup() {
   
   Serial.begin(9600);
   Wire.begin();
-
-
+  
+  DateTime dateTime;
+  
+  dateTime.seconds = 0;
+  dateTime.minutes = 55;
+  dateTime.hours = 0;
+  dateTime.dayOfWeek=4;
+  dateTime.day = 17;
+  dateTime.month = 4;
+  dateTime.year = 2014;
+  
+  rtc.setDateTime(dateTime);
+  
   memset(buffer,0,8);
   
 }
