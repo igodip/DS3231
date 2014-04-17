@@ -30,15 +30,18 @@ THE SOFTWARE.
 //Constructors
 DS3231::DS3231(){
 	this->devAddr = DS3231_I2C_ADDR;
+	
 }
 
 DS3231::DS3231(uint8_t address){
 	this->devAddr = address;
+	
 }
 
 //Init
 void DS3231::initialize(){
 	mode12= getMode12();
+	interruptPin = -1;
 }
 
 bool DS3231::testConnection() {

@@ -122,8 +122,7 @@ private:
 	RtcCallback * alarm1Callback;
 	RtcCallback * alarm2Callback;
 
-	int alarm1Pin;
-	int alarm2Pin;
+	int interruptPin;
 
 protected:
 	void setAlarm(int num, const DateTime & date,const RtcCallback & callback, const int intPin);
@@ -171,11 +170,14 @@ public:
 	void setDateTime(DateTime date);
 
 	//Alarms
-	void setAlarm1(const DateTime & date,const RtcCallback & callback, const int intPin);
-	void setAlarm2(const DateTime & date,const RtcCallback & callback, const int intPin);
+	void setAlarm1(const DateTime & date,const RtcCallback & callback);
+	void setAlarm2(const DateTime & date,const RtcCallback & callback);
 	
 	void unsetAlarm1();
 	void unsetAlarm2();
+
+	void setInterruptPin(const int interruptPin);
+	int getInterruptPin() const;
 
 
 	//Aging Offset
